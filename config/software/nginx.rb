@@ -15,7 +15,7 @@
 #
 
 name "nginx"
-default_version "1.8.1"
+default_version "1.14.0"
 
 dependency "pcre"
 dependency "openssl"
