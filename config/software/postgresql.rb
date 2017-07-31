@@ -15,7 +15,7 @@
 #
 
 name "postgresql"
-default_version "9.2.10"
+default_version "9.4.1"
 
 license "PostgreSQL"
 license_file "COPYRIGHT"
