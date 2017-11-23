@@ -15,7 +15,7 @@
 #
 
 name "postgresql"
-default_version "9.4.1"
+default_version "9.6.6"
 
 license "PostgreSQL"
 license_file "COPYRIGHT"
@@ -50,6 +50,10 @@ end
 
 version "9.2.8" do
   source md5: "c5c65a9b45ee53ead0b659be21ca1b97"
+end
+
+version "9.6.6" do
+  source md5: "7c65858172597de7937efd88f208969b"
 end
 
 version "9.5.8" do
