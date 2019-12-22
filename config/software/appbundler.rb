@@ -15,7 +15,7 @@
 #
 
 name "appbundler"
-default_version "v0.12.5"
+default_version "v0.12.7"
 
 license "Apache-2.0"
 license_file "LICENSE.txt"
