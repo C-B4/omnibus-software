@@ -16,6 +16,8 @@
 name "chef"
 default_version "master"
 
+version("14.14.29")      { source sha256: "dba1569e499c920a74a7aca71db1bfb520a24a06d82db1db4d9ceb3ee70fab5a" }
+
 license "Apache-2.0"
 license_file "LICENSE"
 
