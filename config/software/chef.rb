@@ -56,7 +56,7 @@ dependency "libarchive" # for archive resource
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
-  gem "install bundler"
+  bundle "update --bundler"
 
   # compiled ruby on windows 2k8R2 x86 is having issues compiling
   # native extensions for pry-byebug so excluding for now
