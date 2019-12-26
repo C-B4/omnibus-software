@@ -63,6 +63,8 @@ build do
   excluded_groups << "ruby_prof" if aix?
   excluded_groups << "ruby_shadow" if aix?
 
+  bundle "update --bundler"
+
   # install the whole bundle first
   bundle "install --without #{excluded_groups.join(' ')}", env: env
 
