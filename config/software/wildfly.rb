@@ -14,8 +14,13 @@
 #
 
 name "wildfly"
-default_version "14.0.1.Final"
+default_version "17.0.1.Final"
 skip_transitive_dependency_licensing true
+
+
+version "17.0.1.Final" do
+  source sha1: "eaef7a87062837c215e54511c4ada8951f0bd8d5"
+end
 
 version "14.0.1.Final" do
   source md5: "85caaab6ff0e729a9a92d49ddfb7d162"
