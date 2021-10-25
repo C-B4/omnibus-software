@@ -15,7 +15,7 @@
 #
 
 name "chef-vault"
-default_version "master"
+default_version "main"
 
 source git: "https://github.com/chef/chef-vault.git"
 

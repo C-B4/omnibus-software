@@ -15,7 +15,7 @@
 #
 
 name "chefspec"
-default_version "master"
+default_version "main"
 
 source git: "https://github.com/chefspec/chefspec.git"
 
