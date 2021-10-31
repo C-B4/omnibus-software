@@ -1,5 +1,5 @@
 #
-# Copyright 2012-2018 Chef Software, Inc.
+# Copyright:: Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,30 +20,15 @@ license "MPL-2.0"
 license_file "https://www.mozilla.org/media/MPL/2.0/index.815ca599c9df.txt"
 skip_transitive_dependency_licensing true
 
-default_version "2018-12-05"
+default_version "2021-09-30"
 
-source url: "https://curl.haxx.se/ca/cacert-#{version}.pem"
+source url: "https://curl.se/ca/cacert-#{version}.pem"
 
-version("2018-12-05") { source sha256: "4d89992b90f3e177ab1d895c00e8cded6c9009bec9d56981ff4f0a59e9cc56d6" }
-
-version("2018-10-17") { source sha256: "86695b1be9225c3cf882d283f05c944e3aabbc1df6428a4424269a93e997dc65" }
-
-version("2018-06-20") { source sha256: "238823cd92d3bcdd67c1c278536d6c282dd6b526ee6ee97efbf00ef31d8c5d79" }
-
-version("2018-03-07") { source sha256: "79ea479e9f329de7075c40154c591b51eb056d458bc4dff76d9a4b9c6c4f6d0b" }
-
-version("2018-01-17") { source sha256: "defe310a0184a12e4b1b3d147f1d77395dd7a09e3428373d019bef5d542ceba3" }
-
-version("2017-06-07") { source sha256: "e78c8ab7b4432bd466e64bb942d988f6c0ac91cd785017e465bdc96d42fe9dd0" }
-
-version("2017-01-18") { source sha256: "e62a07e61e5870effa81b430e1900778943c228bd7da1259dd6a955ee2262b47" }
-
-version("2016-04-20") { source sha256: "2c6d4960579b0d4fd46c6cbf135545116e76f2dbb7490e24cf330f2565770362" }
-
-version "2016.01.20" do
-  source sha256: "674f211b2a5898f2740ea62f3003ce817cdbf5f00325ab3169b7bb9922fc7808"
-  source url: "https://curl.haxx.se/ca/cacert-2016-01-20.pem"
-end
+# versions_list: https://curl.se/docs/caextract.html
+version("2021-09-30") { source sha256: "f524fc21859b776e18df01a87880efa198112214e13494275dbcbd9bcb71d976" }
+version("2021-07-05") { source sha256: "a3b534269c6974631db35f952e8d7c7dbf3d81ab329a232df575c2661de1214a" }
+version("2021-05-25") { source sha256: "3a32ad57e7f5556e36ede625b854057ac51f996d59e0952c207040077cbe48a9" }
+version("2021-01-19") { source sha256: "e010c0c071a2c79a76aa3c289dc7e4ac4ed38492bfda06d766a80b707ebd2f29" }
 
 relative_path "cacerts-#{version}"
 
