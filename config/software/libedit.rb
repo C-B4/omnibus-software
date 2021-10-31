@@ -29,7 +29,7 @@ version("20141030-3.1") { source md5: "5f18e63346d31b877cdf36b5c59b810b" }
 version("20130712-3.1") { source md5: "0891336c697362727a1fa7e60c5cb96c" }
 version("20120601-3.0") { source md5: "e50f6a7afb4de00c81650f7b1a0f5aea" }
 
-source url: "http://www.thrysoee.dk/editline/libedit-#{version}.tar.gz"
+source url: "https://www.thrysoee.dk/editline/libedit-#{version}.tar.gz"
 
 if version == "20141030-3.1"
   # released tar file has name discrepency in folder name for this version
