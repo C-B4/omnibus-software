@@ -28,7 +28,7 @@ version "2.1.1" do
   source md5: "8fa53ea8f71d88da9503f62793336bc3"
 end
 
-source url: "https://smarden.org/runit/runit-#{version}.tar.gz"
+source url: "http://smarden.org/runit/runit-#{version}.tar.gz"
 
 relative_path "admin/runit-#{version}/src"
 
