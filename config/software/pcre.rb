@@ -33,7 +33,7 @@ version "8.31" do
   source md5: "fab1bb3b91a4c35398263a5c1e0858c1"
 end
 
-source url: "http://downloads.sourceforge.net/project/pcre/pcre/#{version}/pcre-#{version}.tar.gz"
+source url: "https://downloads.sourceforge.net/project/pcre/pcre/#{version}/pcre-#{version}.tar.gz"
 
 relative_path "pcre-#{version}"
 
