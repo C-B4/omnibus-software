@@ -15,6 +15,7 @@
 #
 
 name "rubygems"
+default_version "3.0.5"
 
 license "MIT"
 license_file "https://raw.githubusercontent.com/rubygems/rubygems/master/LICENSE.txt"
