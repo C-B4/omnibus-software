@@ -31,8 +31,8 @@ dependency "bundler"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
-
-  bundle "install --without development docs ci", env: env
+  ENV['BUNDLER_WITHOUT']='development docs ci'
+  bundle "install", env: env
 
   gem "build ohai.gemspec", env: env
   gem "install ohai*.gem" \
