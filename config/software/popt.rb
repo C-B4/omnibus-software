@@ -23,8 +23,11 @@ skip_transitive_dependency_licensing true
 
 dependency "config_guess"
 
-source url: "ftp://anduin.linuxfromscratch.org/BLFS/popt/popt-#{version}.tar.gz",
-       sha256: "e728ed296fe9f069a0e005003c3d6b2dde3d9cad453422a10d6558616d304cc8"
+source url: "https://src.fedoraproject.org/repo/pkgs/popt/popt-1.16.tar.gz/sha512/bae2dd4e5d682ef023fdc77ae60c4aad01a3a576d45af9d78d22490c11e410e60edda37ede171920746d4ae0d5de3c060d15cecfd41ba75b727a811be828d694/popt-1.16.tar.gz",
+       sha512: "bae2dd4e5d682ef023fdc77ae60c4aad01a3a576d45af9d78d22490c11e410e60edda37ede171920746d4ae0d5de3c060d15cecfd41ba75b727a811be828d694" 
+
+# source url: "ftp://anduin.linuxfromscratch.org/BLFS/popt/popt-#{version}.tar.gz",
+#        sha256: "e728ed296fe9f069a0e005003c3d6b2dde3d9cad453422a10d6558616d304cc8"
 
 relative_path "popt-#{version}"
 
