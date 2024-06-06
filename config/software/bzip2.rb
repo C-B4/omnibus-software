@@ -18,7 +18,7 @@
 # and should be picked up automatically when building Python.
 
 name "bzip2"
-default_version "1.0.6"
+default_version "1.0.7"
 
 license "BSD-2-Clause"
 license_file "LICENSE"
@@ -27,7 +27,7 @@ skip_transitive_dependency_licensing true
 dependency "zlib"
 dependency "openssl"
 
-version("1.0.6") { source sha256: "a2848f34fcd5d6cf47def00461fcb528a0484d8edef8208d6d2e2909dc61d9cd" }
+version("1.0.7") { source sha512: "e0e19b493e6b1f7beeb0eeb0be8a6358c24202173f28acb1e902a768835be9e24f2cb966452fbc90fc3e4e692532ce0c7e86d06aef2d52c0d2a9ac16e12ec8c8" }
 
 source url: "https://sourceware.org/pub/bzip2/#{name}-#{version}.tar.gz"
 
