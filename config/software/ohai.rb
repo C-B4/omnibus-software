@@ -33,7 +33,8 @@ dependency "bundler"
 build do
 
   env = with_standard_compiler_flags(with_embedded_path)
-  bundle "install --verbose --without development docs ci ffidep", env: env
+  bundle config set "without" 'development docs ci ffidep'
+  bundle "install --verbose", env: env
 
   gem "build ohai.gemspec", env: env
   gem "install ohai*.gem" \
