@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 gemspec
-gem 'ffi', '=1.15.4'
-gem 'ffi-yajl', '=2.4.0'
+gem 'ffi', '=1.15.4', force_version: true
+gem 'ffi-yajl', '=2.4.0', force_version: true
 
 group :development, :test do
   gem "omnibus", git: "https://github.com/chef/omnibus", branch: 'main'
