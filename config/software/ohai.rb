@@ -28,15 +28,15 @@ relative_path "ohai"
 dependency "ruby"
 dependency "rubygems"
 dependency "bundler"
-dependency "ffi", "=1.15.4"
-dependency "ffi-yajl", "=2.4.0"
 
 
 build do
 
   env = with_standard_compiler_flags(with_embedded_path)
-  command "bundle config set without 'development docs ci ffidep'", env: env
-  bundle "install --verbose", env: env
+
+   # Ensure ffi version 1.15.4 is installed
+   gem "ffi", "=1.15.4"
+   bundle "install --verbose", env: env
 
   gem "build ohai.gemspec", env: env
   gem "install ohai*.gem" \
