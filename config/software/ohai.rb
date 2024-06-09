@@ -50,7 +50,7 @@ build do
   env = with_standard_compiler_flags(with_embedded_path)
   ENV['BUNDLER_WITHOUT']='development docs ci'
 
-  bundle "install", env: env
+  bundle "install --verbose", env: env
  # Ensure any existing ffi versions are uninstalled
  gem "uninstall ffi -a -x", env: env
 
