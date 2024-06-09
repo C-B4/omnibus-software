@@ -33,8 +33,7 @@ dependency "bundler"
 build do
 
   env = with_standard_compiler_flags(with_embedded_path)
-  ENV['BUNDLER_WITHOUT']='development docs ci ffi ffi-yajl'
-  bundle "install --verbose", env: env
+  bundle "install --verbose --without development docs ci ffi ffi-yajl", env: env
 
   gem "build ohai.gemspec", env: env
   gem "install ohai*.gem" \
