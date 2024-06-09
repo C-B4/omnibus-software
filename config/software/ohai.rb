@@ -34,10 +34,6 @@ build do
 
   env = with_standard_compiler_flags(with_embedded_path)
 
-   # Ensure ffi version 1.15.4 is installed
-   gem "ffi", "=1.15.4"
-   bundle "install --verbose", env: env
-
   gem "build ohai.gemspec", env: env
   gem "install ohai*.gem" \
       "  --no-document", env: env
