@@ -28,6 +28,8 @@ relative_path "ohai"
 dependency "ruby"
 dependency "rubygems"
 dependency "bundler"
+dependency "ffi", "=1.15.4"
+dependency "ffi-yajl", "=2.4.0"
 
 
 build do
