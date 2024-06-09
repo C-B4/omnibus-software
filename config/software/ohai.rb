@@ -31,21 +31,6 @@ dependency "bundler"
 
 
 build do
-  # Define print_dependencies method within the build block
-  def print_dependencies(gemspec_file)
-    spec = Gem::Specification.load(gemspec_file)
-    puts "Dependencies for #{spec.name} (#{spec.version}):"
-
-    puts "\nRuntime Dependencies:"
-    spec.runtime_dependencies.each do |dep|
-      puts "  - #{dep.name} (#{dep.requirement})"
-    end
-
-    puts "\nDevelopment Dependencies:"
-    spec.development_dependencies.each do |dep|
-      puts "  - #{dep.name} (#{dep.requirement})"
-    end
-  end
 
   env = with_standard_compiler_flags(with_embedded_path)
   ENV['BUNDLER_WITHOUT']='development docs ci'
@@ -56,7 +41,6 @@ build do
 
  # Ensure ffi version 1.15.4 is installed
  gem "install ffi -v '1.15.4'", env: env
- print_dependencies("ohai.gemspec")
 
   gem "build ohai.gemspec", env: env
   gem "install ohai*.gem" \
