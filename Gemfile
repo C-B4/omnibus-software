@@ -7,3 +7,8 @@ group :development, :test do
   gem "rake"
   gem "chefstyle"
 end
+
+group :ffidep do
+  gem "ffi"
+  gem "ffi-yajl"
+end
