@@ -33,14 +33,8 @@ dependency "bundler"
 build do
 
   env = with_standard_compiler_flags(with_embedded_path)
-  ENV['BUNDLER_WITHOUT']='development docs ci'
-
+  ENV['BUNDLER_WITHOUT']='development docs ci ffi ffi-yajl'
   bundle "install --verbose", env: env
- # Ensure any existing ffi versions are uninstalled
- gem "uninstall ffi -a -x", env: env
-
- # Ensure ffi version 1.15.4 is installed
- gem "install ffi -v '1.15.4'", env: env
 
   gem "build ohai.gemspec", env: env
   gem "install ohai*.gem" \
