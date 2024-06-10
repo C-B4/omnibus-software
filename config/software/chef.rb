@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 name "chef"
-default_version "v14.8.12"
+default_version "v17.2.0"
 
 license "Apache-2.0"
 license_file "LICENSE"
@@ -63,7 +63,7 @@ build do
   excluded_groups << "ruby_prof" if aix?
   excluded_groups << "ruby_shadow" if aix?
 # ruby_shadow 2.5.0 breaks with ruby 3
-  gem "install ruby-shadow -v '2.5.1'", env: env
+#  gem "install ruby-shadow -v '2.5.1'", env: env
 
   bundle "update --bundler"
 
