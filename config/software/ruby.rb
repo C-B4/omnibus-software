@@ -92,9 +92,6 @@ elsif aix?
   env["SOLIBS"] = "-lm -lc"
   # need to use GNU m4, default m4 doesn't work
   env["M4"] = "/opt/freeware/bin/m4"
-elsif solaris_11?
-  env["CFLAGS"] << " -std=c99"
-  env["CPPFLAGS"] << " -D_XOPEN_SOURCE=600 -D_XPG6"
 elsif windows?
   env["CFLAGS"] = "-I#{install_dir}/embedded/include -DFD_SETSIZE=2048"
   if windows_arch_i386?
@@ -118,17 +115,6 @@ build do
   # AIX needs /opt/freeware/bin only for patch
   patch_env = env.dup
   patch_env["PATH"] = "/opt/freeware/bin:#{env['PATH']}" if aix?
-
-  if solaris_10?
-    patch source: "ruby-no-stack-protector.patch", plevel: 1, env: patch_env
-  end
-
-  # wrlinux7/ios_xr build boxes from Cisco include libssp and there is no way to
-  # disable ruby from linking against it, but Cisco switches will not have the
-  # library.  Disabling it as we do for Solaris.
-  if ios_xr?
-    patch source: "ruby-no-stack-protector.patch", plevel: 1, env: patch_env
-  end
 
   # disable libpath in mkmf across all platforms, it trolls omnibus and
   # breaks the postgresql cookbook.  i'm not sure why ruby authors decided
