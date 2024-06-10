@@ -18,7 +18,7 @@
 # and should be picked up automatically when building Python.
 
 name "bzip2"
-default_version "1.0.6"
+default_version "1.0.7"
 
 license "BSD-2-Clause"
 license_file "LICENSE"
