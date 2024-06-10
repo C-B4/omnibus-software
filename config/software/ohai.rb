@@ -33,6 +33,11 @@ dependency "bundler"
 build do
 
   env = with_standard_compiler_flags(with_embedded_path)
+  # Set the environment variable
+  ENV['BUNDLE_FORCE_RUBY_PLATFORM'] = 'true'
+
+  # Run the bundle install command
+  system('bundle install')
   bundle "install --verbose --without development docs ci ffidep --full-index", env: env
 
   gem "build ohai.gemspec", env: env
