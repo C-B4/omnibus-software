@@ -1,5 +1,5 @@
 #
-# Copyright 2012-2018, Chef Software Inc.
+# Copyright:: Chef Software Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 #
 
 name "libxml2"
-default_version "2.9.8"
+default_version "2.11.7"
 
 license "MIT"
 license_file "COPYING"
@@ -25,13 +25,20 @@ dependency "zlib"
 dependency "liblzma"
 dependency "config_guess"
 
-version("2.9.8") { source sha256: "0b74e51595654f958148759cfef0993114ddccccbb6f31aee018f3558e8e2732" }
-version("2.9.7") { source sha256: "f63c5e7d30362ed28b38bfa1ac6313f9a80230720b7fb6c80575eeab3ff5900c" }
-version("2.9.5") { source sha256: "4031c1ecee9ce7ba4f313e91ef6284164885cdb69937a123f6a83bb6a72dcd38" }
-version("2.9.4") { source sha256: "ffb911191e509b966deb55de705387f14156e1a56b21824357cdf0053233633c" }
-version("2.9.3") { source sha256: "4de9e31f46b44d34871c22f54bfc54398ef124d6f7cafb1f4a5958fbcd3ba12d" }
+# version_list: url=https://download.gnome.org/sources/libxml2/ filter=*.tar.xz
+version("2.12.5") { source sha256: "a972796696afd38073e0f59c283c3a2f5a560b5268b4babc391b286166526b21" }
+version("2.11.7") { source sha256: "fb27720e25eaf457f94fd3d7189bcf2626c6dccf4201553bc8874d50e3560162" }
+version("2.10.4") { source sha256: "ed0c91c5845008f1936739e4eee2035531c1c94742c6541f44ee66d885948d45" }
+version("2.9.14") { source sha256: "60d74a257d1ccec0475e749cba2f21559e48139efba6ff28224357c7c798dfee" }
+version("2.9.13") { source sha256: "276130602d12fe484ecc03447ee5e759d0465558fbc9d6bd144e3745306ebf0e" }
+version("2.9.12") { source sha256: "28a92f6ab1f311acf5e478564c49088ef0ac77090d9c719bbc5d518f1fe62eb9" }
+version("2.9.10") { source sha256: "593b7b751dd18c2d6abcd0c4bcb29efc203d0b4373a6df98e3a455ea74ae2813" }
+version("2.9.9")  { source sha256: "58a5c05a2951f8b47656b676ce1017921a29f6b1419c45e3baed0d6435ba03f5" }
 
-source url: "ftp://xmlsoft.org/libxml2/libxml2-#{version}.tar.gz"
+minor_version = version.gsub(/\.\d+\z/, "")
+source url: "https://download.gnome.org/sources/libxml2/#{minor_version}/libxml2-#{version}.tar.xz"
+internal_source url: "#{ENV["ARTIFACTORY_REPO_URL"]}/#{name}/#{name}-#{version}.tar.xz",
+                authorization: "X-JFrog-Art-Api:#{ENV["ARTIFACTORY_TOKEN"]}"
 
 relative_path "libxml2-#{version}"
 
@@ -40,9 +47,17 @@ build do
 
   configure_command = [
     "--with-zlib=#{install_dir}/embedded",
+    "--with-lzma=#{install_dir}/embedded",
+    "--with-sax1", # required for nokogiri to compile
     "--without-iconv",
     "--without-python",
     "--without-icu",
+    "--without-debug",
+    "--without-mem-debug",
+    "--without-run-debug",
+    "--without-legacy", # we don't need legacy interfaces
+    "--without-catalog",
+    "--without-docbook",
   ]
 
   update_config_guess

@@ -1,5 +1,5 @@
 #
-# Copyright 2012-2014 Chef Software, Inc.
+# Copyright:: Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 #
 
 name "postgresql"
-default_version "9.6.10"
+default_version "15.1"
 
 license "PostgreSQL"
 license_file "COPYRIGHT"
@@ -28,145 +28,28 @@ dependency "ncurses"
 dependency "libossp-uuid"
 dependency "config_guess"
 
-#
-# Version 9.6
-#
-version "9.6.10" do
-  source sha256: "8615acc56646401f0ede97a767dfd27ce07a8ae9c952afdb57163b7234fe8426"
-end
+# version_list: url=https://ftp.postgresql.org/pub/source/v#{version}/ filter=*.tar.bz2
 
-#
-# Verison 9.5
-#
-version "9.5.14" do
-  source sha256: "3e2cd5ea0117431f72c9917c1bbad578ea68732cb284d1691f37356ca0301a4d"
-end
+version("15.1")   { source sha256: "64fdf23d734afad0dfe4077daca96ac51dcd697e68ae2d3d4ca6c45cb14e21ae" }
+version("15.0")   { source sha256: "72ec74f4a7c16e684f43ea42e215497fcd4c55d028a68fb72e99e61ff40da4d6" }
+version("14.5")   { source sha256: "d4f72cb5fb857c9a9f75ec8cf091a1771272802f2178f0b2e65b7b6ff64f4a30" }
+version("14.4")   { source sha256: "c23b6237c5231c791511bdc79098617d6852e9e3bdf360efd8b5d15a1a3d8f6a" }
+version("14.3")   { source sha256: "279057368bf59a919c05ada8f95c5e04abb43e74b9a2a69c3d46a20e07a9af38" }
+version("14.2")   { source sha256: "2cf78b2e468912f8101d695db5340cf313c2e9f68a612fb71427524e8c9a977a" }
+version("14.1")   { source sha256: "4d3c101ea7ae38982f06bdc73758b53727fb6402ecd9382006fa5ecc7c2ca41f" }
 
-version "9.6.6" do
-  source md5: "7c65858172597de7937efd88f208969b"
-end
+# Version 12.x will EoL November 14, 2024
+version("12.7")   { source sha256: "8490741f47c88edc8b6624af009ce19fda4dc9b31c4469ce2551d84075d5d995" }
 
-version "9.5.8" do
-  source sha256: "ade57068f134f36710fa953e1ef79185abd96572f8098741413132f79ed37202"
-end
+# Version 9.6 will EoL November 11, 2021
+version("9.6.22") { source sha256: "3d32cd101025a0556813397c69feff3df3d63736adb8adeaf365c522f39f2930" }
 
-version "9.5.1" do
-  source md5: "11e037afaa4bd0c90bb3c3d955e2b401"
-end
-
-version "9.5.0" do
-  source md5: "2f3264612ac32e5abdfb643fec934036"
-end
-
-version "9.5beta1" do
-  source md5: "4bd67bfa4dc148e3f9d09f6699b5931f"
-end
-
-#
-# Version 9.4
-#
-version "9.4.19" do
-  source sha256: "03776b036b2a05371083558e10c21cc4b90bde9eb3aff60299c4ce7c084c168b"
-end
-
-version "9.4.13" do
-  source sha256: "0080f55d65194de8b96a2dab153443f8248ff2b2b10e6ab4cda2dcadcac7f2ab"
-end
-
-version "9.4.6" do
-  source md5: "0371b9d4fb995062c040ea5c3c1c971e"
-end
-
-version "9.4.5" do
-  source md5: "8b2e3472a8dc786649b4d02d02e039a0"
-end
-
-version "9.4.1" do
-  source md5: "2cf30f50099ff1109d0aa517408f8eff"
-end
-
-version "9.4.0" do
-  source md5: "8cd6e33e1f8d4d2362c8c08bd0e8802b"
-end
-
-#
-# Version 9.3 will EoL 2018-11 or thereabouts
-#
-version "9.3.24" do
-  source sha256: "8214a73a3b2135226bdc1394c9efdcb80f79e504ec700cf9b23d0b6bc2b60da9"
-end
-
-version "9.3.18" do
-  source sha256: "ad60d12a5a3dd0f6f5904c41b87e43eff49d3f74e45129fe52c5744366ff2fe0"
-end
-
-version "9.3.14" do
-  source sha256: "5c4322f1c42ba1ff4b28383069c56663b46160bb08e85d41fa2ab9a5009d039d"
-end
-
-version "9.3.10" do
-  source md5: "ec2365548d08f69c8023eddd4f2d1a28"
-end
-
-version "9.3.6" do
-  source md5: "0212b03f2835fdd33126a2e70996be8e"
-end
-
-version "9.3.5" do
-  source md5: "5059857c7d7e6ad83b6d55893a121b59"
-end
-
-version "9.3.4" do
-  source md5: "d0a41f54c377b2d2fab4a003b0dac762"
-end
-
-#
-# Version 9.2 was EoL 2017-11-06
-#
-version "9.2.24" do
-  source sha256: "a754c02f7051c2f21e52f8669a421b50485afcde9a581674d6106326b189d126"
-end
-
-version "9.2.22" do
-  source sha256: "a70e94fa58776b559a8f7b5301371ac4922c9e3ed313ccbef20862514de7c192"
-end
-
-version "9.2.21" do
-  source sha256: "0697e843523ee60c563f987f9c65bc4201294b18525d6e5e4b2c50c6d4058ef9"
-end
-
-version "9.2.14" do
-  source md5: "ce2e50565983a14995f5dbcd3c35b627"
-end
-
-version "9.2.10" do
-  source md5: "7b81646e2eaf67598d719353bf6ee936"
-end
-
-version "9.2.9" do
-  source md5: "38b0937c86d537d5044c599273066cfc"
-end
-
-version "9.2.8" do
-  source md5: "c5c65a9b45ee53ead0b659be21ca1b97"
-end
-
-#
-# Version 9.1 was EoL 2016-10-24 or thereabouts.
-#
-version "9.1.24" do
-  source sha256: "de0d84e9f32af145fcd66d8d324f6ef1a0b17944ea344b7bbe9d99fff68ae5d3"
-end
-
-version "9.1.15" do
-  source md5: "6ac52cf13ecf6b09c7d42928d1219cae"
-end
-
-version "9.1.9" do
-  source md5: "6b5ea53dde48fcd79acfc8c196b83535"
-end
+# Version 9.3 was EoL November 8, 2018 (but used in Supermarket as of 6.2021)
+version("9.3.25") { source sha256: "e4953e80415d039ccd33d34be74526a090fd585cf93f296cd9c593972504b6db" }
 
 source url: "https://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.bz2"
+internal_source url: "#{ENV["ARTIFACTORY_REPO_URL"]}/#{name}/#{name}-#{version}.tar.gz",
+                authorization: "X-JFrog-Art-Api:#{ENV["ARTIFACTORY_TOKEN"]}"
 
 relative_path "postgresql-#{version}"
 

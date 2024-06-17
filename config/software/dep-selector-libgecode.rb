@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# expeditor/ignore: deprecated 2021-04
 
 name "dep-selector-libgecode"
 default_version "1.3.1"
@@ -23,7 +24,7 @@ license_file "https://raw.githubusercontent.com/chef/dep-selector-libgecode/mast
 # rubygems here.
 skip_transitive_dependency_licensing true
 
-dependency "rubygems"
+dependency "ruby"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)

@@ -1,5 +1,5 @@
 #
-# Copyright 2012-2014 Chef Software, Inc.
+# Copyright:: Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 #
 
 name "erlang"
-default_version "18.3"
+default_version "25.2"
 
 license "Apache-2.0"
 license_file "LICENSE.txt"
@@ -26,43 +26,46 @@ dependency "openssl"
 dependency "ncurses"
 dependency "config_guess"
 
-#
-# OTP only puts minor version updates in the downloads page. E.g. 18.3 is present, but 18.3.4.9 wouldn't be
-# It's nice to be able to have those updates, so we're moving to using the github releases instead
-# However for backcompat leave the prior stuff alone.
-if version.satisfies?("<= 18.3") || version.satisfies?("=20.0")
-  source url: "http://www.erlang.org/download/otp_src_#{version}.tar.gz"
-  relative_path "otp_src_#{version}"
-else
-  source url: "https://github.com/erlang/otp/archive/OTP-#{version}.tar.gz"
-  relative_path "otp-OTP-#{version}"
-end
+# grab from github so we can get patch releases if we need to
+source url: "https://github.com/erlang/otp/archive/OTP-#{version}.tar.gz"
+internal_source url: "#{ENV["ARTIFACTORY_REPO_URL"]}/#{name}/#{name}-#{version}.tar.gz",
+                authorization: "X-JFrog-Art-Api:#{ENV["ARTIFACTORY_TOKEN"]}"
+relative_path "otp-OTP-#{version}"
 
-version("18.1") { source md5: "fa64015fdd133e155b5b19bf90ac8678" }
-version("18.2") { source md5: "b336d2a8ccfbe60266f71d102e99f7ed" }
-version("18.3") { source md5: "7e4ff32f97c36fb3dab736f8d481830b" }
-version("18.3.4.9") { source sha256: "25ef8ba3824cb726c4830abf32c2a2967925b1e33a8e8851dba596e933e2689a" }
-version("19.3.6.11") { source sha256: "c857ea6d2c901bfb633d9ceeb5e05332475357f185dd5112b7b6e4db80072827" }
-version("20.0") { source md5: "2faed2c3519353e6bc2501ed4d8e6ae7" }
-version("20.3.8.9") { source sha256: "897dd8b66c901bfbce09ed64e0245256aca9e6e9bdf78c36954b9b7117192519" }
-version("21.1") { source sha256: "7212f895ae317fa7a086fa2946070de5b910df5d41263e357d44b0f1f410af0f" }
+# versions_list: https://github.com/erlang/otp/tags filter=*.tar.gz
+version("25.2") { source sha256: "d33a988f39e534aff67799c5b9635612858459c9d8890772546d71ea38de897a" }
+version("25.1.2")    { source sha256: "b9ae7becd3499aeac9f94f9379e2b1b4dced4855454fe7f200a6e3e1cf4fbc53" }
+version("25.0.4")    { source sha256: "05878cb51a64b33c86836b12a21903075c300409b609ad5e941ddb0feb8c2120" }
+version("25.0.2")    { source sha256: "f78764c6fd504f7b264c47e469c0fcb86a01c92344dc9d625dfd42f6c3ed8224" }
+version("25.0")      { source sha256: "5988e3bca208486494446e885ca2149fe487ee115cbc3770535fd22a795af5d2" }
+version("24.3.4.7")  { source sha256: "80c08cf1c181a124dd805bb1d91ff5c1996bd8a27b3f4d008b1ababf48d9947e" }
+version("24.3.4")    { source sha256: "e59bedbb871af52244ca5284fd0a572d52128abd4decf4347fe2aef047b65c58" }
+version("24.3.3")    { source sha256: "a5f4d83426fd3dc2f08c0c823ae29bcf72b69008a2baee66d27ad614ec7ab607" }
+version("24.3.2")    { source sha256: "cdc9cf788d28a492eb6b24881fbd06a0a5c785dc374ad415b3be1db96326583c" }
+version("18.3")      { source sha256: "a6d08eb7df06e749ccaf3049b33ceae617a3c466c6a640ee8d248c2372d48f4e" }
 
 build do
-  if version.satisfies?(">= 18.3")
-    # Don't listen on 127.0.0.1/::1 implicitly whenever ERL_EPMD_ADDRESS is given
+  # Don't listen on 127.0.0.1/::1 implicitly whenever ERL_EPMD_ADDRESS is given
+  if version.satisfies?("<= 24.3.3")
     patch source: "epmd-require-explicitly-adding-loopback-address.patch", plevel: 1
+  else
+    patch source: "updated-epmd-require-explicitly-adding-loopback-address.patch", plevel: 1
   end
 
   env = with_standard_compiler_flags(with_embedded_path).merge(
     # WARNING!
-    "CFLAGS"  => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/erlang/include",
+    "CFLAGS"  => "-L#{install_dir}/embedded/lib -O3 -I#{install_dir}/embedded/erlang/include",
     "LDFLAGS" => "-Wl,-rpath #{install_dir}/embedded/lib -L#{install_dir}/embedded/lib -I#{install_dir}/embedded/erlang/include"
   )
   env.delete("CPPFLAGS")
 
+  # The TYPE env var sets the type of emulator you want
+  # We want the default so we give TYPE and empty value
+  # in case it was set by CI.
+  env["TYPE"] = ""
+
   update_config_guess(target: "erts/autoconf")
   update_config_guess(target: "lib/common_test/priv/auxdir")
-  update_config_guess(target: "lib/erl_interface/src/auxdir")
   update_config_guess(target: "lib/wx/autoconf")
 
   if version.satisfies?(">= 19.0")
@@ -97,7 +100,7 @@ build do
   # See also https://sourceware.org/ml/binutils/2015-05/msg00148.html
   hipe = ppc64le? ? "disable" : "enable"
 
-  if !File.exist?("./configure")
+  unless File.exist?("./configure")
     # Building from github source requires this step
     command "./otp_build autoconf"
   end
@@ -115,6 +118,7 @@ build do
           " --enable-kernel-poll" \
           " --enable-dynamic-ssl-lib" \
           " --enable-shared-zlib" \
+          " --enable-fips" \
           " --#{hipe}-hipe" \
           " --#{wx}-wx" \
           " --#{wx}-et" \

@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# expeditor/ignore: deprecated 2022-05
 
 name "rsync"
 default_version "3.1.1"
@@ -39,6 +40,8 @@ version "2.6.9" do
 end
 
 source url: "https://rsync.samba.org/ftp/rsync/src/rsync-#{version}.tar.gz"
+internal_source url: "#{ENV["ARTIFACTORY_REPO_URL"]}/#{name}/#{name}-#{version}.tar.gz",
+                authorization: "X-JFrog-Art-Api:#{ENV["ARTIFACTORY_TOKEN"]}"
 
 relative_path "rsync-#{version}"
 

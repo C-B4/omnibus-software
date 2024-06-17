@@ -1,5 +1,5 @@
 #
-# Copyright 2014 Chef Software, Inc.
+# Copyright:: Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,31 +20,40 @@ license "Artistic-2.0"
 license_file "Artistic"
 skip_transitive_dependency_licensing true
 
-default_version "5.18.1"
+default_version "5.36.0"
 
-version "5.22.1" do
-  source md5: "19295bbb775a3c36123161b9bf4892f1"
-end
-version "5.18.1" do
-  source md5: "304cb5bd18e48c44edd6053337d3386d"
-end
-source url: "http://www.cpan.org/src/5.0/perl-#{version}.tar.gz"
+# versions_list: http://www.cpan.org/src/ filter=*.tar.gz
+version("5.36.0") { source sha256: "e26085af8ac396f62add8a533c3a0ea8c8497d836f0689347ac5abd7b7a4e00a" }
+version("5.34.1") { source sha256: "357951a491b0ba1ce3611263922feec78ccd581dddc24a446b033e25acf242a1" }
+version("5.34.0") { source sha256: "551efc818b968b05216024fb0b727ef2ad4c100f8cb6b43fab615fa78ae5be9a" }
+version("5.32.1") { source sha256: "03b693901cd8ae807231b1787798cf1f2e0b8a56218d07b7da44f784a7caeb2c" }
+version("5.30.0") { source sha256: "851213c754d98ccff042caa40ba7a796b2cee88c5325f121be5cbb61bbf975f2" }
+version("5.22.1") { source sha256: "2b475d0849d54c4250e9cba4241b7b7291cffb45dfd083b677ca7b5d38118f27" }
+version("5.18.1") { source sha256: "655e11a8ffba8853efcdce568a142c232600ed120ac24aaebb4e6efe74e85b2b" }
+source url: "https://www.cpan.org/src/5.0/perl-#{version}.tar.gz"
+internal_source url: "#{ENV["ARTIFACTORY_REPO_URL"]}/#{name}/#{name}-#{version}.tar.gz",
+                authorization: "X-JFrog-Art-Api:#{ENV["ARTIFACTORY_TOKEN"]}"
+
+# perl builds perl as libraries into a special directory. We need to include
+# that directory in lib_dirs so omnibus can sign them during macOS deep signing.
+lib_dirs lib_dirs.concat ["#{install_dir}/embedded/lib/perl5/**"]
+
 relative_path "perl-#{version}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  solaris_mapfile_path = File.expand_path(Omnibus::Config.solaris_linker_mapfile, Omnibus::Config.project_root)
-  if solaris_10?
-    cc_command = "-Dcc='gcc -static-libgcc'"
-    if File.exist?(solaris_mapfile_path)
-      cc_command = "-Dcc='gcc -static-libgcc -Wl,-M #{solaris_mapfile_path}'"
-    end
-  elsif solaris_11?
+  if version.satisfies?("<= 5.34.0")
+    patch source: "perl-#{version}-remove_lnsl.patch", plevel: 1, env: env
+  end
+
+  if solaris2?
     cc_command = "-Dcc='gcc -m64 -static-libgcc'"
   elsif aix?
     cc_command = "-Dcc='/opt/IBM/xlc/13.1.0/bin/cc_r -q64'"
   elsif freebsd? && ohai["os_version"].to_i >= 1000024
+    cc_command = "-Dcc='clang'"
+  elsif mac_os_x?
     cc_command = "-Dcc='clang'"
   else
     cc_command = "-Dcc='gcc -static-libgcc'"
@@ -61,11 +70,6 @@ build do
   if aix?
     configure_command << "-Dmake=gmake"
     configure_command << "-Duse64bitall"
-  end
-
-  # On Cisco IOS-XR, we don't want libssp as a dependency
-  if ios_xr?
-    configure_command << "-Accflags=-fno-stack-protector"
   end
 
   command configure_command.join(" "), env: env

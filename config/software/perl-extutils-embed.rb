@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# expeditor/ignore: deprecated 2021-04
 
 name "perl-extutils-embed"
 default_version "1.14"
@@ -21,7 +22,8 @@ dependency "perl"
 
 source url: "http://search.cpan.org/CPAN/authors/id/D/DO/DOUGM/ExtUtils-Embed-#{version}.tar.gz",
        md5: "b2a2c26a18bca3ce69f8a0b1b54a0105"
-
+internal_source url: "#{ENV["ARTIFACTORY_REPO_URL"]}/#{name}/#{name}-#{version}.tar.gz",
+       authorization: "X-JFrog-Art-Api:#{ENV["ARTIFACTORY_TOKEN"]}"
 relative_path "ExtUtils-Embed-#{version}"
 
 build do

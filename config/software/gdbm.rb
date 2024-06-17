@@ -13,6 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# expeditor/ignore: deprecated 2021-11
+#
 
 name "gdbm"
 default_version "1.8.3"
@@ -48,4 +50,5 @@ build do
 
   make "-j #{workers}", env: env
   make "install", env: env
+  make "install-compat", env: env
 end

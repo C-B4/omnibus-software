@@ -15,18 +15,19 @@
 #
 
 name "xproto"
-default_version "7.0.25"
+default_version "7.0.31"
 
-version "7.0.28" do
-  source md5: "0b42843b99aee3e4f6a9cc7710143f86"
-end
+dependency "config_guess"
 
-version "7.0.25" do
-  source md5: "a47db46cb117805bd6947aa5928a7436"
-end
+# version_list: url=https://www.x.org/releases/individual/proto/ filter=xproto-*.tar.gz
+
+version("7.0.31") { source sha256: "6d755eaae27b45c5cc75529a12855fed5de5969b367ed05003944cf901ed43c7" }
+version("7.0.28") { source sha256: "6cabc8ce3fa2b1a2427871167b62c24d5b08a58bd3e81ed7aaf08f2bf6dbcfed" }
+version("7.0.25") { source sha256: "e3dc634103f923a2276289745eb7b702b18cfc885ea4b2382bd35a8cc3d935cb" }
 
 source url: "https://www.x.org/releases/individual/proto/xproto-#{version}.tar.gz"
-
+internal_source url: "#{ENV["ARTIFACTORY_REPO_URL"]}/#{name}/#{name}-#{version}.tar.gz",
+                authorization: "X-JFrog-Art-Api:#{ENV["ARTIFACTORY_TOKEN"]}"
 license "MIT"
 license_file "COPYING"
 skip_transitive_dependency_licensing true
@@ -35,6 +36,8 @@ relative_path "xproto-#{version}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
+
+  update_config_guess
 
   command "./configure" \
           " --prefix=#{install_dir}/embedded", env: env

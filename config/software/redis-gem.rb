@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# expeditor/ignore: deprecated 2021-04
 
 name "redis-gem"
 default_version "3.3.3"
@@ -24,7 +25,6 @@ license_file "https://raw.githubusercontent.com/redis/redis-rb/master/LICENSE"
 skip_transitive_dependency_licensing true
 
 dependency "ruby"
-dependency "rubygems"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)

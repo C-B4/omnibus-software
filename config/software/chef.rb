@@ -1,5 +1,5 @@
 #
-# Copyright 2012-2018, Chef Software Inc.
+# Copyright:: Copyright (c) Chef Software Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,8 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# expeditor/ignore: no version pinning
+
 name "chef"
-default_version "v14.8.12"
+default_version "main"
 
 license "Apache-2.0"
 license_file "LICENSE"
@@ -48,30 +50,34 @@ end
 relative_path "chef"
 
 dependency "ruby"
-dependency "rubygems"
-dependency "bundler"
-dependency "ohai"
-dependency "appbundler"
 dependency "libarchive" # for archive resource
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  # compiled ruby on windows 2k8R2 x86 is having issues compiling
-  # native extensions for pry-byebug so excluding for now
-  excluded_groups = %w{server docgen maintenance pry travis integration ci}
+  # The --without groups here MUST match groups in https://github.com/chef/chef/blob/main/Gemfile
+  excluded_groups = %w{docgen chefstyle}
   excluded_groups << "ruby_prof" if aix?
   excluded_groups << "ruby_shadow" if aix?
+  excluded_groups << "ed25519" if solaris2?
 
-  bundle "update --bundler"
+  # these are gems which are not shipped but which must be installed in the testers
+  bundle_excludes = excluded_groups + %w{development test}
 
-  # install the whole bundle first
-  bundle "install --without #{excluded_groups.join(' ')}", env: env
+  bundle "install --without #{bundle_excludes.join(" ")}", env: env
 
-  # use the rake install task to build/install chef-config
-  bundle "exec rake install", env: env
+  ruby "post-bundle-install.rb", env: env
 
-  gemspec_name = windows? ? "chef-universal-mingw32.gemspec" : "chef.gemspec"
+  # use the rake install task to build/install chef-config/chef-utils
+  command "rake install:local", env: env
+
+  # NOTE: Chef18 is packaged and built with ruby31 whereas previous versions of Chef are ONLY built
+  # with ruby31,the packaged versions differ. So we use Chef's own version to determine the windows gemspec.
+  gemspec_name = if windows?
+                   project.build_version.partition(".")[0].to_i < 18 ? "chef-universal-mingw32.gemspec" : "chef-universal-mingw-ucrt.gemspec"
+                 else
+                   "chef.gemspec"
+                 end
 
   # This step will build native components as needed - the event log dll is
   # generated as part of this step.  This is why we need devkit.
@@ -88,6 +94,20 @@ build do
     copy "distro/powershell/chef/*", "#{install_dir}/modules/chef"
   end
 
-  appbundle "chef", env: env
-  appbundle "ohai", env: env
+  block do
+    appbundle "chef", lockdir: project_dir, gem: "inspec-core-bin", without: excluded_groups, env: env
+    appbundle "chef", lockdir: project_dir, gem: "chef-bin", without: excluded_groups, env: env
+    appbundle "chef", lockdir: project_dir, gem: "chef", without: excluded_groups, env: env
+    appbundle "chef", lockdir: project_dir, gem: "ohai", without: excluded_groups, env: env
+  end
+
+  # The rubyzip gem ships with some test fixture data compressed in a format Apple's notarization service
+  # cannot understand. We need to delete that archive to pass notarization.
+  block "Delete test folder of rubyzip gem so downstream projects pass notarization" do
+    env["VISUAL"] = "echo"
+    %w{rubyzip}.each do |gem|
+      gem_install_dir = shellout!("#{install_dir}/embedded/bin/gem open #{gem}", env: env).stdout.chomp
+      remove_directory "#{gem_install_dir}/test"
+    end
+  end
 end

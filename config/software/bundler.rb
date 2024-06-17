@@ -1,5 +1,5 @@
 #
-# Copyright 2012-2018, Chef Software Inc.
+# Copyright 2012-2019, Chef Software Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# expeditor/ignore: deprecated 2021-04
 
 name "bundler"
 default_version "2.1.0"
@@ -30,6 +31,9 @@ build do
   gem [
     "install bundler",
     v_opts,
-    " --no-document --force",
+    "--no-document --force",
   ].compact.join(" "), env: env
+
+  # confirm the install was successful
+  command "bundle version", env: env
 end

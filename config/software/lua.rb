@@ -15,22 +15,23 @@
 #
 
 name "lua"
-default_version "5.3.3"
+default_version "5.4.6"
 
-version("5.1.5") do
-  source md5: "2e115fe26e435e33b0d5c022e4490567"
-  license_file "COPYRIGHT" # dropped in 5.2.x
-end
-
-version("5.2.4") { source sha256: "b9e2e4aad6789b3b63a056d442f7b39f0ecfca3ae0f1fc0ae4e9614401b69f4b" }
-
+# versions_list: https://www.lua.org/ftp/ filter=*.tar.gz
+version("5.4.6") { source sha256: "7d5ea1b9cb6aa0b59ca3dde1c6adcb57ef83a1ba8e5432c0ecd06bf439b3ad88" }
+version("5.4.4") { source sha256: "164c7849653b80ae67bec4b7473b884bf5cc8d2dca05653475ec2ed27b9ebf61" }
+version("5.4.3") { source sha256: "f8612276169e3bfcbcfb8f226195bfc6e466fe13042f1076cbde92b7ec96bbfb" }
+version("5.4.2") { source sha256: "11570d97e9d7303c0a59567ed1ac7c648340cd0db10d5fd594c09223ef2f524f" }
 version("5.3.3") { source sha256: "5113c06884f7de453ce57702abaac1d618307f33f6789fa870e87a59d772aca2" }
+version("5.2.4") { source sha256: "b9e2e4aad6789b3b63a056d442f7b39f0ecfca3ae0f1fc0ae4e9614401b69f4b" }
 
 license "MIT"
 license_file "https://www.lua.org/license.html"
 skip_transitive_dependency_licensing true
 
 source url: "https://www.lua.org/ftp/lua-#{version}.tar.gz"
+internal_source url: "#{ENV["ARTIFACTORY_REPO_URL"]}/#{name}/#{name}-#{version}.tar.gz",
+                authorization: "X-JFrog-Art-Api:#{ENV["ARTIFACTORY_TOKEN"]}"
 
 relative_path "lua-#{version}"
 

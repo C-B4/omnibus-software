@@ -13,15 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# expeditor/ignore: deprecated 2021-04
 
 name "chef-gem"
 default_version "11.12.2"
 
 license "Apache-2.0"
-license_file "https://raw.githubusercontent.com/chef/chef/master/LICENSE"
+license_file "https://raw.githubusercontent.com/chef/chef/main/LICENSE"
 
 dependency "ruby"
-dependency "rubygems"
 dependency "libffi"
 dependency "rb-readline"
 

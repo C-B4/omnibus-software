@@ -13,6 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# expeditor/ignore: deprecated 2021-11
+#
 
 name "libuuid"
 default_version "2.21"
@@ -21,7 +23,6 @@ license "LGPL-2.1"
 license_file "COPYING"
 
 source url: "https://www.kernel.org/pub/linux/utils/util-linux/v#{version}/util-linux-#{version}.tar.gz"
-
 # We use the version in util-linux, and only build the libuuid subdirectory
 version "2.27.1" do
   source md5: "e9c73747eadf5201b2a198530add4f87",

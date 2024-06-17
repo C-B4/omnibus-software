@@ -1,7 +1,9 @@
 *.gem
 .bundle
 Gemfile.lock
+vendor
 pkg/*
+test/pkg/*
 /binstubs
 /bin
 
