@@ -35,14 +35,7 @@ build do
   env = with_standard_compiler_flags(with_embedded_path)
 
   solaris_mapfile_path = File.expand_path(Omnibus::Config.solaris_linker_mapfile, Omnibus::Config.project_root)
-  if solaris_10?
-    cc_command = "-Dcc='gcc -static-libgcc'"
-    if File.exist?(solaris_mapfile_path)
-      cc_command = "-Dcc='gcc -static-libgcc -Wl,-M #{solaris_mapfile_path}'"
-    end
-  elsif solaris_11?
-    cc_command = "-Dcc='gcc -m64 -static-libgcc'"
-  elsif aix?
+  if aix?
     cc_command = "-Dcc='/opt/IBM/xlc/13.1.0/bin/cc_r -q64'"
   elsif freebsd? && ohai["os_version"].to_i >= 1000024
     cc_command = "-Dcc='clang'"
@@ -61,11 +54,6 @@ build do
   if aix?
     configure_command << "-Dmake=gmake"
     configure_command << "-Duse64bitall"
-  end
-
-  # On Cisco IOS-XR, we don't want libssp as a dependency
-  if ios_xr?
-    configure_command << "-Accflags=-fno-stack-protector"
   end
 
   command configure_command.join(" "), env: env

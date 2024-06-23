@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 name "chef"
-default_version "v14.8.12"
+default_version "v17.2.29"
 
 license "Apache-2.0"
 license_file "LICENSE"
@@ -62,11 +62,13 @@ build do
   excluded_groups = %w{server docgen maintenance pry travis integration ci}
   excluded_groups << "ruby_prof" if aix?
   excluded_groups << "ruby_shadow" if aix?
+# ruby_shadow 2.5.0 breaks with ruby 3
+#  gem "install ruby-shadow -v '2.5.1'", env: env
 
   bundle "update --bundler"
 
   # install the whole bundle first
-  bundle "install --without #{excluded_groups.join(' ')}", env: env
+  bundle "install --verbose --without #{excluded_groups.join(' ')}", env: env
 
   # use the rake install task to build/install chef-config
   bundle "exec rake install", env: env
