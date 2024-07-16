@@ -22,6 +22,7 @@ license_file "LICENSE"
 # Grab accompanying notice file.
 # So that Open4/deep_merge/diff-lcs disclaimers are present in Omnibus LICENSES tree.
 license_file "NOTICE"
+chef_license 'accept'
 
 # For the specific super-special version "local_source", build the source from
 # the local git checkout. This is what you'd want to occur by default if you
