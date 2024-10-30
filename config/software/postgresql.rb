@@ -15,7 +15,7 @@
 #
 
 name "postgresql"
-default_version "9.6.10"
+default_version "12.20"
 
 license "PostgreSQL"
 license_file "COPYRIGHT"
@@ -27,6 +27,11 @@ dependency "libedit"
 dependency "ncurses"
 dependency "libossp-uuid"
 dependency "config_guess"
+
+version "12.20" do
+  source sha256: "2d543af3009fec7fd5af35f7a70c95085d3eef6b508e517aa9493e99b15e9ea9"
+end
+# https://ftp.postgresql.org/pub/source/v12.20/postgresql-12.20.tar.bz2.sha256
 
 #
 # Version 9.6
