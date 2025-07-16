@@ -16,14 +16,15 @@
 #
 
 name "ohai"
-default_version "v17.9.7"
+default_version "18.1.0"
 
 license "Apache-2.0"
 license_file "LICENSE"
 
-source git: "https://github.com/chef/ohai.git"
+version("18.1.0") { source sha256: "fa04e06231835ec4c728f00f1fd23f7939ff6886619dbf4a18cc1796379de933" }
 
-relative_path "ohai"
+
+source url: "https://rubygems.org/downloads/ohai-#{version}.gem"
 
 dependency "ruby"
 dependency "rubygems"
@@ -32,9 +33,5 @@ dependency "bundler"
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  bundle "install --without development docs ci", env: env
-
-  gem "build ohai.gemspec", env: env
-  gem "install ohai*.gem" \
-      "  --no-document", env: env
+  gem "install ohai-#{version}.gem --no-document", env: env
 end

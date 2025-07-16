@@ -15,7 +15,7 @@
 #
 
 name "ncurses"
-default_version "5.9"
+default_version "6.5-20250809"
 
 license "MIT"
 license_file "http://invisible-island.net/ncurses/ncurses-license.html"
@@ -25,6 +25,7 @@ skip_transitive_dependency_licensing true
 dependency "libtool" if aix?
 dependency "config_guess"
 
+version("6.5-20250809") { source md5: "679987405412f970561cc85e1e6428a2", url: "https://invisible-island.net/archives/ncurses/current/ncurses-6.5-20250809.tgz" }
 version("5.9") { source md5: "8cb9c412e5f2d96bc6f459aa8c6282a1", url: "https://ftp.gnu.org/gnu/ncurses/ncurses-5.9.tar.gz" }
 version("5.9-20150530") { source md5: "bb2cbe1d788d3ab0138fc2734e446b43", url: "ftp://invisible-island.net/ncurses/current/ncurses-5.9-20150530.tgz" }
 version("6.0-20150613") { source md5: "0c6a0389d004c78f4a995bc61884a563", url: "ftp://invisible-island.net/ncurses/current/ncurses-6.0-20150613.tgz" }

@@ -25,13 +25,15 @@ skip_transitive_dependency_licensing true
 # the default versions should always be the latest release of ruby
 # if you consume this definition it is your responsibility to pin
 # to the desired version of ruby. don't count on this not changing.
-default_version "3.0.0"
+default_version "3.2.0"
 
 dependency "zlib"
 dependency "openssl"
 dependency "libffi"
 dependency "libyaml"
 
+version("3.2.0")      { source sha256: "daaa78e1360b2783f98deeceb677ad900f3a36c0ffa6e2b6b19090be77abc272" }
+version("3.1.2")      { source sha256: "61843112389f02b735428b53bb64cf988ad9fb81858b8248e22e57336f24a83e" }
 version("3.0.0")      { source sha256: "a13ed141a1c18eb967aac1e33f4d6ad5f21be1ac543c344e0d6feeee54af8e28" }
 version("2.6.3")      { source sha256: "577fd3795f22b8d91c1d4e6733637b0394d4082db659fccf224c774a2b1c82fb" }
 version("2.6.0")      { source sha256: "f3c35b924a11c88ff111f0956ded3cdc12c90c04b72b266ac61076d3697fc072" }

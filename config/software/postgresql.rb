@@ -15,7 +15,7 @@
 #
 
 name "postgresql"
-default_version "12.20"
+default_version "15.13"
 
 license "PostgreSQL"
 license_file "COPYRIGHT"
@@ -23,10 +23,15 @@ skip_transitive_dependency_licensing true
 
 dependency "zlib"
 dependency "openssl"
-dependency "libedit"
+dependency "libedit";
 dependency "ncurses"
 dependency "libossp-uuid"
 dependency "config_guess"
+
+version "15.13" do
+  source sha256: "4f62e133d22ea08a0401b0840920e26698644d01a80c34341fb732dd0a90ca5d"
+end
+# https://ftp.postgresql.org/pub/source/v15.13/postgresql-15.13.tar.gz.sha256
 
 version "12.20" do
   source sha256: "2d543af3009fec7fd5af35f7a70c95085d3eef6b508e517aa9493e99b15e9ea9"
