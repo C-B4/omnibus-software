@@ -23,14 +23,30 @@ skip_transitive_dependency_licensing true
 
 dependency "ruby"
 dependency "rubygems"
+dependency "libffi"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  gem_command = [ "install pry  --no-document" ]
+  # Force embedded Ruby and tools first in PATH
+  env["PATH"] = "#{install_dir}/embedded/bin:#{env['PATH']}"
+
+  # Library linking - build time and runtime
+  env["LDFLAGS"] << " -L#{install_dir}/embedded/lib -Wl,-rpath,#{install_dir}/embedded/lib"
+  env["LD_LIBRARY_PATH"] = "#{install_dir}/embedded/lib"
+
+  # Header files for native extensions
+  env["CFLAGS"] << " -I#{install_dir}/embedded/include"
+  env["CPPFLAGS"] ||= ""
+  env["CPPFLAGS"] << " -I#{install_dir}/embedded/include"
+
+  # pkg-config for libraries like libffi
+  env["PKG_CONFIG_PATH"] = "#{install_dir}/embedded/lib/pkgconfig"
+
+  gem_command = ["install pry --no-document"]
   gem_command << "--version '#{version}'" unless version.nil?
 
   gem gem_command.join(" "), env: env
 
-  gem "install pry-remote pry-byebug pry-stack_explorer  --no-document"
+  gem "install pry-remote pry-stack_explorer --no-document", env: env
 end

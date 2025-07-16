@@ -15,7 +15,7 @@
 #
 
 name "bundler"
-default_version "2.1.0"
+default_version "2.7.1"
 
 license "MIT"
 license_file "https://raw.githubusercontent.com/bundler/bundler/master/LICENSE.md"

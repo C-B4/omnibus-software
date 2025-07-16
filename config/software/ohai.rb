@@ -32,6 +32,8 @@ dependency "bundler"
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
+   env["BUNDLE_FORCE_RUBY_PLATFORM"] = "1"
+
   bundle "install --without development docs ci", env: env
 
   gem "build ohai.gemspec", env: env

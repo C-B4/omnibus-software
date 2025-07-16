@@ -15,7 +15,7 @@
 #
 
 name "python"
-default_version "2.7.9"
+default_version "3.12.3"
 
 license "Python-2.0"
 license_file "LICENSE"
@@ -23,19 +23,22 @@ skip_transitive_dependency_licensing true
 
 dependency "ncurses"
 dependency "zlib"
+# dependency "readline"
 dependency "openssl"
 dependency "bzip2"
+dependency "libffi"
 
+version("3.12.3") { source sha256: "56bfef1fdfc1221ce6720e43a661e3eb41785dd914ce99698d8c7896af4bdaa1" }
 version("2.7.14") { source sha256: "304c9b202ea6fbd0a4a8e0ad3733715fbd4749f2204a9173a58ec53c32ea73e8" }
 version("2.7.13") { source md5: "17add4bf0ad0ec2f08e0cae6d205c700" }
 version("2.7.11") { source md5: "6b6076ec9e93f05dd63e47eb9c15728b" }
 version("2.7.9") { source md5: "5eebcaa0030dc4061156d3429657fb83" }
 version("2.7.5") { source md5: "b4f01a1d0ba0b46b05c73b2ac909b1df" }
 
-source url: "https://python.org/ftp/python/#{version}/Python-#{version}.tgz"
+source url: "https://python.org/ftp/python/#{version}/Python-#{version}.tar.xz"
 
 relative_path "Python-#{version}"
-
+major_version, minor_version = version.split(".")
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
@@ -44,27 +47,31 @@ build do
     env["MACOSX_DEPLOYMENT_TARGET"] = os_x_release
   end
 
+  # === Force linking to embedded libraries ===
+  env["CFLAGS"] << " -I#{install_dir}/embedded/include"
+  env["LDFLAGS"] << " -L#{install_dir}/embedded/lib -Wl,-rpath,#{install_dir}/embedded/lib"
+
   command "./configure" \
           " --prefix=#{install_dir}/embedded" \
           " --enable-shared" \
-          " --with-dbmliborder=", env: env
+          " --with-dbmliborder=" \
+          " --with-readline=readline", env: env
 
   make env: env
   make "install", env: env
+    # There exists no configure flag to tell Python to not compile readline
+  delete "#{install_dir}/embedded/lib/python#{major_version}.#{minor_version}/lib-dynload/readline.*"
 
-  # There exists no configure flag to tell Python to not compile readline
-  delete "#{install_dir}/embedded/lib/python2.7/lib-dynload/readline.*"
-
-  # Ditto for sqlite3
-  delete "#{install_dir}/embedded/lib/python2.7/lib-dynload/_sqlite3.*"
-  delete "#{install_dir}/embedded/lib/python2.7/sqlite3/"
-
-  # Remove unused extension which is known to make healthchecks fail on CentOS 6
-  delete "#{install_dir}/embedded/lib/python2.7/lib-dynload/_bsddb.*"
-
-  # Remove sqlite3 libraries, if you want to include sqlite, create a new def
-  # in your software project and build it explicitly. This removes the adapter
-  # library from python, which links incorrectly to a system library. Adding
-  # your own sqlite definition will fix this.
-  delete "#{install_dir}/embedded/lib/python2.7/lib-dynload/_sqlite3.*"
+    # Ditto for sqlite3
+  delete "#{install_dir}/embedded/lib/python#{major_version}.#{minor_version}/lib-dynload/_sqlite3.*"
+  delete "#{install_dir}/embedded/lib/python#{major_version}.#{minor_version}/sqlite3/"
+  
+    # Remove unused extension which is known to make healthchecks fail on CentOS 6
+  delete "#{install_dir}/embedded/lib/python#{major_version}.#{minor_version}/lib-dynload/_bsddb.*"
+  
+    # Remove sqlite3 libraries, if you want to include sqlite, create a new def
+    # in your software project and build it explicitly. This removes the adapter
+    # library from python, which links incorrectly to a system library. Adding
+    # your own sqlite definition will fix this.
+  delete "#{install_dir}/embedded/lib/python#{major_version}.#{minor_version}/lib-dynload/_sqlite3.*"
 end
