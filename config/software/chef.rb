@@ -62,7 +62,7 @@ build do
   excluded_groups = %w{server docgen maintenance pry travis integration ci}
   excluded_groups << "ruby_prof" if aix?
   excluded_groups << "ruby_shadow" if aix?
-# ruby_shadow 2.5.0 breaks with ruby 3
+  # ruby_shadow 2.5.0 breaks with ruby 3
   gem "install ruby-shadow -v '2.5.1'", env: env
 
   bundle "update --bundler"
