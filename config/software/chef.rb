@@ -53,10 +53,8 @@ build do
   # native extensions for pry-byebug so excluding for now
   excluded_groups = %w{server docgen maintenance pry travis integration ci}
   excluded_groups << "ruby_prof" if aix?
-  excluded_groups << "ruby_shadow" if aix?
+  excluded_groups << "ruby_shadow"
   # ruby_shadow 2.5.0 breaks with ruby 3, but 2.5.1 works with ruby 3.2
-    # ruby-shadow 2.5.0 breaks with ruby 3. Use patched fork instead (v2.5.1)
-  gem 'ruby-shadow', '~> 2.5.1', git: 'https://github.com/apalmblad/ruby-shadow.git'
   bundle "update --bundler"
   # install the whole bundle first
   bundle "install --verbose --without #{excluded_groups.join(' ')}", env: env
