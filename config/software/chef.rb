@@ -51,11 +51,11 @@ build do
   env = with_standard_compiler_flags(with_embedded_path)
   # compiled ruby on windows 2k8R2 x86 is having issues compiling
   # native extensions for pry-byebug so excluding for now
-  excluded_groups = %w{server docgen maintenance pry travis integration ci}
+  excluded_groups = %w{server docgen maintenance pry travis integration ci ruby-shadow}
   excluded_groups << "ruby_prof" if aix?
   excluded_groups << "ruby_shadow"
   # ruby_shadow 2.5.0 breaks with ruby 3, but 2.5.1 works with ruby 3.2
-  gem "install ruby-shadow -v '2.5.1'", env: env
+  # gem "install ruby-shadow -v '2.5.1'", env: env
   bundle "update --bundler"
   # install the whole bundle first
   bundle "install --verbose --without #{excluded_groups.join(' ')}", env: env
