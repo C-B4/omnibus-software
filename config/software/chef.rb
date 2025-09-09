@@ -53,12 +53,13 @@ build do
   # native extensions for pry-byebug so excluding for now
   excluded_groups = %w{server docgen maintenance pry travis integration ci}
   excluded_groups << "ruby_prof" if aix?
-  excluded_groups << "ruby_shadow"
+  excluded_groups << "ruby_shadow" if aix?
   # ruby_shadow 2.5.0 breaks with ruby 3, but 2.5.1 works with ruby 3.2
-  # Force _GNU_SOURCE so shadow.h prototypes (getspent, fgetspent, etc.) are visible on glibc 2.17
-#   env["CFLAGS"] = "#{env["CFLAGS"]} -D_GNU_SOURCE"
-#
-#   gem "install ruby-shadow --version 2.5.1 -- --with-cflags='-D_GNU_SOURCE'", env: env
+    # ruby-shadow 2.5.0 breaks with ruby 3. Use patched fork instead (v2.5.1)
+  gem "install ruby-shadow" \
+      " --version '2.5.1'" \
+      " --source 'https://github.com/apalmblad/ruby-shadow.git'" \
+      " --branch v2.5.1", env: env
   bundle "update --bundler"
   # install the whole bundle first
   bundle "install --verbose --without #{excluded_groups.join(' ')}", env: env
