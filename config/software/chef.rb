@@ -55,7 +55,7 @@ build do
   excluded_groups << "ruby_prof" if aix?
   excluded_groups << "ruby_shadow"
   # ruby_shadow 2.5.0 breaks with ruby 3, but 2.5.1 works with ruby 3.2
-  # gem "install ruby-shadow -v '2.5.1'", env: env
+  gem "install ruby-shadow -v '2.5.1'", env: env
   bundle "update --bundler"
   # install the whole bundle first
   bundle "install --verbose --without #{excluded_groups.join(' ')}", env: env
