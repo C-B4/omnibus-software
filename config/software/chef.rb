@@ -61,7 +61,8 @@ build do
   excluded_groups << "ruby_prof" if aix?
   bundle "update --bundler"
   # install the whole bundle first
-  bundle "install --verbose --without #{excluded_groups.join(' ')}", env: env
+  bundle "config set --local without '#{excluded_groups.join(' ')}'", env: env
+  bundle "install --verbose", env: env
   # use the rake install task to build/install chef-config
   bundle "exec rake install", env: env
   gemspec_name = windows? ? "chef-universal-mingw32.gemspec" : "chef.gemspec"
