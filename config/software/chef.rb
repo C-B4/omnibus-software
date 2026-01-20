@@ -79,5 +79,5 @@ build do
     copy "distro/powershell/chef/*", "#{install_dir}/modules/chef"
   end
   appbundle "chef", env: env
-  appbundle "ohai", env: env
+  # appbundle "ohai", env: env
 end
