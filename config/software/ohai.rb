@@ -16,12 +16,12 @@
 #
 
 name "ohai"
-default_version "18.1.0"
+default_version "16.0.20"
 
 license "Apache-2.0"
 license_file "LICENSE"
 
-version("18.1.0") { source sha256: "fa04e06231835ec4c728f00f1fd23f7939ff6886619dbf4a18cc1796379de933" }
+version("16.0.20") { source sha256: "d635f4c2e0209934dbabd8a58437d26163b9bd44f5bf2f6801e9968fe4d3800e" }
 
 
 source url: "https://rubygems.org/downloads/ohai-#{version}.gem"
