@@ -25,7 +25,7 @@ dependency "zlib"
 dependency "openssl"
 dependency "libedit";
 dependency "ncurses"
-dependency "readline"
+# dependency "readline"
 dependency "libossp-uuid"
 dependency "config_guess"
 

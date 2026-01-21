@@ -24,7 +24,7 @@ skip_transitive_dependency_licensing true
 dependency "ncurses"
 dependency "zlib"
 dependency "sqlite"
-dependency "readline"
+# dependency "readline"
 dependency "openssl"
 dependency "bzip2"
 dependency "libffi"  # <-- ADD THIS
