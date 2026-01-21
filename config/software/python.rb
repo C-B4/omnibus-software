@@ -27,7 +27,7 @@ dependency "sqlite"
 # dependency "readline"
 dependency "openssl"
 dependency "bzip2"
-dependency "libffi"  # <-- ADD THIS
+dependency "libffi"
 
 version("3.12.3") { source sha256: "56bfef1fdfc1221ce6720e43a661e3eb41785dd914ce99698d8c7896af4bdaa1" }
 version("2.7.14") { source sha256: "304c9b202ea6fbd0a4a8e0ad3733715fbd4749f2204a9173a58ec53c32ea73e8" }
@@ -51,7 +51,6 @@ build do
   # === Force linking to embedded libraries ===
   env["CFLAGS"] << " -I#{install_dir}/embedded/include"
   env["LDFLAGS"] << " -L#{install_dir}/embedded/lib -Wl,-rpath,#{install_dir}/embedded/lib"
-  # === END ADD ===
 
   command "./configure" \
           " --prefix=#{install_dir}/embedded" \
@@ -63,12 +62,4 @@ build do
 
   make env: env
   make "install", env: env
-
-  # === CHANGE: Update paths from python2.7 to python3.12 ===
-  # Remove unused extensions that cause health check failures
-  # Only delete if you DON'T want these modules (comment out if you need them)
-  
-  # delete "#{install_dir}/embedded/lib/python3.12/lib-dynload/readline.*"
-  # delete "#{install_dir}/embedded/lib/python3.12/lib-dynload/_sqlite3.*"
-  # delete "#{install_dir}/embedded/lib/python3.12/sqlite3/"
 end
