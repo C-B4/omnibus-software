@@ -55,9 +55,7 @@ build do
           " --prefix=#{install_dir}/embedded" \
           " --enable-shared" \
           " --with-dbmliborder=" \
-          " --with-system-ffi" \
-          " --with-readline=#{install_dir}/embedded" \
-          "", env: env
+          " --with-readline=readline", env: env
 
   make env: env
   make "install", env: env
