@@ -39,6 +39,8 @@ relative_path "pcre-#{version}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
+  
+  env["LDFLAGS"] << " -L#{install_dir}/embedded/lib -Wl,-rpath,#{install_dir}/embedded/lib"
 
   update_config_guess
 

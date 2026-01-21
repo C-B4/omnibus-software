@@ -25,6 +25,7 @@ dependency "zlib"
 dependency "openssl"
 dependency "libedit";
 dependency "ncurses"
+dependency "readline"
 dependency "libossp-uuid"
 dependency "config_guess"
 
@@ -183,6 +184,8 @@ relative_path "postgresql-#{version}"
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
+  env["LDFLAGS"] << " -Wl,-rpath,#{install_dir}/embedded/lib"
+
   update_config_guess(target: "config")
 
   command "./configure" \
@@ -190,6 +193,7 @@ build do
           " --with-libedit-preferred" \
           " --with-openssl" \
           " --with-ossp-uuid" \
+          " --with-readline" \
           " --with-includes=#{install_dir}/embedded/include" \
           " --with-libraries=#{install_dir}/embedded/lib", env: env
 

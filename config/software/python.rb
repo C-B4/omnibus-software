@@ -23,8 +23,11 @@ skip_transitive_dependency_licensing true
 
 dependency "ncurses"
 dependency "zlib"
+dependency "sqlite"
+dependency "readline"
 dependency "openssl"
 dependency "bzip2"
+dependency "libffi"  # <-- ADD THIS
 
 version("3.12.3") { source sha256: "56bfef1fdfc1221ce6720e43a661e3eb41785dd914ce99698d8c7896af4bdaa1" }
 version("2.7.14") { source sha256: "304c9b202ea6fbd0a4a8e0ad3733715fbd4749f2204a9173a58ec53c32ea73e8" }
@@ -45,27 +48,27 @@ build do
     env["MACOSX_DEPLOYMENT_TARGET"] = os_x_release
   end
 
+  # === Force linking to embedded libraries ===
+  env["CFLAGS"] << " -I#{install_dir}/embedded/include"
+  env["LDFLAGS"] << " -L#{install_dir}/embedded/lib -Wl,-rpath,#{install_dir}/embedded/lib"
+  # === END ADD ===
+
   command "./configure" \
           " --prefix=#{install_dir}/embedded" \
           " --enable-shared" \
-          " --with-dbmliborder=", env: env
+          " --with-dbmliborder=" \
+          " --with-system-ffi" \  # <-- ADD THIS
+          " --with-readline=#{install_dir}/embedded" \
+          "", env: env
 
   make env: env
   make "install", env: env
 
-  # There exists no configure flag to tell Python to not compile readline
-  delete "#{install_dir}/embedded/lib/python2.7/lib-dynload/readline.*"
-
-  # Ditto for sqlite3
-  delete "#{install_dir}/embedded/lib/python2.7/lib-dynload/_sqlite3.*"
-  delete "#{install_dir}/embedded/lib/python2.7/sqlite3/"
-
-  # Remove unused extension which is known to make healthchecks fail on CentOS 6
-  delete "#{install_dir}/embedded/lib/python2.7/lib-dynload/_bsddb.*"
-
-  # Remove sqlite3 libraries, if you want to include sqlite, create a new def
-  # in your software project and build it explicitly. This removes the adapter
-  # library from python, which links incorrectly to a system library. Adding
-  # your own sqlite definition will fix this.
-  delete "#{install_dir}/embedded/lib/python2.7/lib-dynload/_sqlite3.*"
+  # === CHANGE: Update paths from python2.7 to python3.12 ===
+  # Remove unused extensions that cause health check failures
+  # Only delete if you DON'T want these modules (comment out if you need them)
+  
+  # delete "#{install_dir}/embedded/lib/python3.12/lib-dynload/readline.*"
+  # delete "#{install_dir}/embedded/lib/python3.12/lib-dynload/_sqlite3.*"
+  # delete "#{install_dir}/embedded/lib/python3.12/sqlite3/"
 end

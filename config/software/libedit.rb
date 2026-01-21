@@ -41,6 +41,11 @@ end
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
+  # === Force linking to embedded ncurses ===
+  env["CFLAGS"] << " -I#{install_dir}/embedded/include -I#{install_dir}/embedded/include/ncurses"
+  env["LDFLAGS"] << " -L#{install_dir}/embedded/lib -Wl,-rpath,#{install_dir}/embedded/lib"
+  # === END ADD ===
+
   # The patch is from the FreeBSD ports tree and is for GCC compatibility.
   # http://svnweb.freebsd.org/ports/head/devel/libedit/files/patch-vi.c?annotate=300896
   if version.to_i < 20150325 && (freebsd? || openbsd?)
@@ -50,15 +55,14 @@ build do
   if openbsd?
     patch source: "openbsd-weak-alias-fix.patch", plevel: 1, env: env
   elsif aix?
-    # this forces us to build correctly, in the event that the system locale
-    # is non-standard.
     env["LC_ALL"] = "en_US"
   end
 
   update_config_guess
 
   command "./configure" \
-          " --prefix=#{install_dir}/embedded", env: env
+          " --prefix=#{install_dir}/embedded" \
+          " --with-ncurses=#{install_dir}/embedded", env: env  # <-- ADD THIS FLAG (may help)
 
   make "-j #{workers}", env: env
   make "-j #{workers} install", env: env

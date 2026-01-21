@@ -19,7 +19,6 @@ default_version "v0.6.0"
 
 license "Apache-2.0"
 license_file "https://raw.githubusercontent.com/chef/omnibus-ctl/master/LICENSE"
-# Even though omnibus-ctl is a gem, it does not have any dependencies.
 skip_transitive_dependency_licensing true
 
 dependency "ruby"
@@ -32,6 +31,11 @@ relative_path "omnibus-ctl"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
+
+  # === ADD THESE LINES - Force use of embedded Ruby ===
+  env["PATH"] = "#{install_dir}/embedded/bin:#{env['PATH']}"
+  env["LDFLAGS"] << " -L#{install_dir}/embedded/lib -Wl,-rpath,#{install_dir}/embedded/lib"
+  # === END ADD ===
 
   # Remove existing built gems in case they exist in the current dir
   delete "omnibus-ctl-*.gem"
