@@ -38,7 +38,7 @@ version("2.7.5") { source md5: "b4f01a1d0ba0b46b05c73b2ac909b1df" }
 source url: "https://python.org/ftp/python/#{version}/Python-#{version}.tar.xz"
 
 relative_path "Python-#{version}"
-
+major_version, minor_version = version.split(".")
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
