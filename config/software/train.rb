@@ -26,10 +26,16 @@ dependency "ruby"
 dependency "rubygems"
 dependency "bundler"
 dependency "google-protobuf"
+dependency "libffi"
+dependency "zlib"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
+  env["PATH"] = "#{install_dir}/embedded/bin:#{env['PATH']}"
+  env["LDFLAGS"] << " -L#{install_dir}/embedded/lib -Wl,-rpath,#{install_dir}/embedded/lib"
+
+  # Exclude test and tools groups which contain byebug, ed25519, etc.
   bundle "install --without development test integration tools", env: env
 
   gem "build train.gemspec", env: env

@@ -38,5 +38,5 @@ build do
 
   gem gem_command.join(" "), env: env
 
-  gem "install pry-remote pry-byebug pry-stack_explorer  --no-document", env: env  # <-- ADD env: env
+  gem "install pry-remote pry-stack_explorer  --no-document", env: env  # <-- ADD env: env
 end
