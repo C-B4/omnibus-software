@@ -28,8 +28,6 @@ version("3.3")   { source sha256: "72fba7922703ddfa7a028d513ac15a85c8d54c8d67f55
 
 source url: "https://github.com/libffi/libffi/releases/download/v#{version}/libffi-#{version}.tar.gz"
 
-# REMOVED: internal_source (not supported in your Omnibus version)
-
 relative_path "libffi-#{version}"
 
 build do
@@ -37,8 +35,14 @@ build do
 
   env["INSTALL"] = "/opt/freeware/bin/install" if aix?
 
-  configure_command = ["--disable-option-checking",
-                       "--disable-docs",
+  # FIX: Explicitly set prefix and libdir to ensure correct installation paths
+  configure_command = [
+    "--prefix=#{install_dir}/embedded",
+    "--libdir=#{install_dir}/embedded/lib",
+    "--disable-option-checking",
+    "--disable-docs",
+    "--enable-shared",
+    "--disable-static",
   ]
 
   if version == "3.3" && mac_os_x? && arm?
@@ -64,4 +68,18 @@ build do
   # libffi's default install location of header files is awful...
   mkdir "#{install_dir}/embedded/include"
   copy "#{install_dir}/embedded/lib/libffi-#{version}/include/*", "#{install_dir}/embedded/include/"
+
+  # FIX: Ensure pkgconfig file is in the standard location
+  # libffi sometimes installs to lib/pkgconfig, sometimes to lib64/pkgconfig
+  mkdir "#{install_dir}/embedded/lib/pkgconfig"
+  
+  # Copy .pc file if it ended up in lib64
+  if File.exist?("#{install_dir}/embedded/lib64/pkgconfig/libffi.pc")
+    copy "#{install_dir}/embedded/lib64/pkgconfig/libffi.pc", "#{install_dir}/embedded/lib/pkgconfig/"
+  end
+
+  # Also copy any libs that ended up in lib64
+  if Dir.exist?("#{install_dir}/embedded/lib64")
+    copy "#{install_dir}/embedded/lib64/libffi*", "#{install_dir}/embedded/lib/"
+  end
 end
