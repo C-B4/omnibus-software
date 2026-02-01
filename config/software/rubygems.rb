@@ -21,7 +21,7 @@ license_file "https://raw.githubusercontent.com/rubygems/rubygems/master/LICENSE
 skip_transitive_dependency_licensing true
 
 dependency "ruby"
-default_version "3.7.1"
+default_version "3.3.3"
 
 
 if version && !source
