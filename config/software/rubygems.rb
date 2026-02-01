@@ -72,5 +72,5 @@ build do
   else
     gem "update --no-document --system #{version}", env: env
   end
-  gem "install bundler -v 2.7.1 --no-document", env: env
+  gem "install bundler -v 2.6.9 --no-document", env: env
 end
