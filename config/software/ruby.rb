@@ -221,19 +221,19 @@ build do
   # it is unclear why or if it is necessary (hand crafted tests designed to try to
   # abuse it all succeeded after this test).
   #
-  if version.satisfies?("~> 2.6.0")
-    patch source: "ruby-faster-load_26.patch", plevel: 1, env: patch_env
-  end
-  if version.satisfies?(">=3.3")
-    patch source: "ruby-faster-load_33.patch", plevel: 1, env: patch_env
-  else
-    if version.satisfies?(">= 2.7")
-      patch source: "ruby-faster-load_27.patch", plevel: 1, env: patch_env
-    end
-  end
-  if freebsd? && version.satisfies?("~> 3.0.3")
-    patch source: "ruby-3.0.3-freebsd_13.patch", plevel: 1, env: patch_env
-  end
+  # if version.satisfies?("~> 2.6.0")
+  #   patch source: "ruby-faster-load_26.patch", plevel: 1, env: patch_env
+  # end
+  # if version.satisfies?(">=3.3")
+  #   patch source: "ruby-faster-load_33.patch", plevel: 1, env: patch_env
+  # else
+  #   if version.satisfies?(">= 2.7")
+  #     patch source: "ruby-faster-load_27.patch", plevel: 1, env: patch_env
+  #   end
+  # end
+  # if freebsd? && version.satisfies?("~> 3.0.3")
+  #   patch source: "ruby-3.0.3-freebsd_13.patch", plevel: 1, env: patch_env
+  # end
   # disable libpath in mkmf across all platforms, it trolls omnibus and
   # breaks the postgresql cookbook.  i'm not sure why ruby authors decided
   # this was a good idea, but it breaks our use case hard.  AIX cannot even
