@@ -49,20 +49,22 @@ dependency "appbundler"
 dependency "libarchive" # for archive resource
 build do
   env = with_standard_compiler_flags(with_embedded_path)
-  # compiled ruby on windows 2k8R2 x86 is having issues compiling
-  # native extensions for pry-byebug so excluding for now
+
   # Remove ruby-shadow from Gemfile completely
   command "sed -i '/ruby-shadow/d' Gemfile", env: env
   command "sed -i '/ruby-shadow/d' Gemfile.lock", env: env if File.exist?("Gemfile.lock")
 
-  # compiled ruby on windows 2k8R2 x86 is having issues compiling
-  # native extensions for pry-byebug so excluding for now
   excluded_groups = %w{server docgen maintenance pry travis integration ci}
   excluded_groups << "ruby_prof" if aix?
+
   bundle "update --bundler"
-  # install the whole bundle first
   bundle "config set --local without '#{excluded_groups.join(' ')}'", env: env
   bundle "install --verbose", env: env
+
+  # Clean up pre-installed gems that cause dependency resolution conflicts
+  # The ohai dependency installs these, but rake install needs a clean slate
+  gem "uninstall -aIx chef-utils chef-config ohai --ignore-dependencies || true", env: env
+
   # use the rake install task to build/install chef-config
   bundle "exec rake install", env: env
   gemspec_name = windows? ? "chef-universal-mingw32.gemspec" : "chef.gemspec"
