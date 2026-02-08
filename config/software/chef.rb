@@ -59,7 +59,7 @@ build do
   # native extensions for pry-byebug so excluding for now
   excluded_groups = %w{server docgen maintenance pry travis integration ci}
   excluded_groups << "ruby_prof" if aix?
-  bundle "update --bundler"
+  bundle "update --bundler", env: env
   # install the whole bundle first
   bundle "config set --local without '#{excluded_groups.join(' ')}'", env: env
   bundle "install --verbose", env: env
