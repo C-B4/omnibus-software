@@ -21,16 +21,10 @@ license_file "https://raw.githubusercontent.com/rubygems/rubygems/master/LICENSE
 skip_transitive_dependency_licensing true
 
 dependency "ruby"
-default_version "3.3.22"
+default_version "3.7.1"
+
 
 if version && !source
-  # NOTE: 2.1.11 is the last version of rubygems before the 2.2.x change to native gem install location
-  #
-  #  https://github.com/rubygems/rubygems/issues/874
-  #
-  # This is a breaking change for omnibus clients.  Chef-11 needs to be pinned to 2.1.11 for eternity.
-  # We have switched from tarballs to just `gem update --system`, but for backcompat
-  # we pin the previously known tarballs.
   known_tarballs = {
     "2.1.11" => "b561b7aaa70d387e230688066e46e448",
     "2.2.1" => "1f0017af0ad3d3ed52665132f80e7443",
@@ -50,16 +44,10 @@ if version && !source
 
   version("v2.4.4_plus_debug") { source git: "https://github.com/danielsdeleo/rubygems.git" }
   version("2.4.4.debug.1")     { source git: "https://github.com/danielsdeleo/rubygems.git" }
-  # This is the 2.4.8 release with a fix for
-  # windows so things like `gem install "pry"` still
-  # work
   version("jdm/2.4.8-patched") { source git: "https://github.com/jaym/rubygems.git" }
 end
 
-# If we still don't have a source (if it's a tarball) grab from ruby ...
 if version && !source
-  # If the version is a gem version, we"ll just be using rubygems.
-  # If it's a branch or SHA (i.e. v1.2.3) we use github.
   begin
     Gem::Version.new(version)
   rescue ArgumentError
@@ -67,7 +55,6 @@ if version && !source
   end
 end
 
-# git repo is always expanded to "rubygems"
 if source && source.include?(:git)
   relative_path "rubygems"
 end
@@ -75,12 +62,15 @@ end
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
+  # === ADD THESE LINES - Force use of embedded Ruby ===
+  env["PATH"] = "#{install_dir}/embedded/bin:#{env['PATH']}"
+  env["LDFLAGS"] << " -L#{install_dir}/embedded/lib -Wl,-rpath,#{install_dir}/embedded/lib"
+  # === END ADD ===
+
   if source
-    # Building from source:
     ruby "setup.rb  --no-document", env: env
   else
-    # Installing direct from rubygems:
-    # If there is no version, this will get latest.
     gem "update --no-document --system #{version}", env: env
   end
+  gem "install bundler -v 2.7.1 --no-document", env: env
 end

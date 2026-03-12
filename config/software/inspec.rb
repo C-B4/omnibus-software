@@ -33,8 +33,12 @@ dependency "appbundler"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
+  
+   env["BUNDLE_FORCE_RUBY_PLATFORM"] = "1"
 
   bundle "install --without test integration tools maintenance", env: env
+
+
 
   gem "build inspec.gemspec", env: env
   gem "install inspec-*.gem" \
